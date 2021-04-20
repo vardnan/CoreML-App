@@ -1,2 +1,2 @@
 # CoreML-App
- Machine learning application developing in Swift, using Apple's CoreML
+ Machine learning application developed in Swift, using Apple's CoreML
