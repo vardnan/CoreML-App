@@ -12,10 +12,11 @@ import Vision
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    
     @IBOutlet weak var imageView: UIImageView!
     
     let imagePicker = UIImagePickerController()
+    
+    var userInput = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+            let alert = UIAlertController(title: "Detect anything 🔎", message: "Write the object you want to detect", preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.placeholder = "E.g. \"chair\" or \"table\""
+            }
+
+            alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { [weak alert] (_) in
+                if let textField = alert?.textFields?[0], let userText = textField.text {
+                    //print("User text: \(userText)")
+                    self.userInput = "\(userText)"
+                    print(self.userInput)
+                }
+            }))
+
+            self.present(alert, animated: true, completion: nil)
+        }
+
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -52,10 +72,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
             
             if let firstResult = results.first {
-                if firstResult.identifier.contains("hotdog") {
-                    self.navigationItem.title = "Hotdog!"
+                if firstResult.identifier.contains("\(self.userInput)") {
+                    self.navigationItem.title = "This is a \(self.userInput) ✅"
                 } else {
-                    self.navigationItem.title = "Not hotdog!"
+                    self.navigationItem.title = "This is not a \(self.userInput) ❌"
                 }
             }
             
